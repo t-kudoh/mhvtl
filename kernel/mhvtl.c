@@ -348,17 +348,21 @@ static const struct file_operations vtl_fops = {
 	.release	= vtl_release,
 };
 
-
-#if LINUX_VERSION_CODE > KERNEL_VERSION(4, 20, 0)
- #include "fetch50.c"
-#elif LINUX_VERSION_CODE > KERNEL_VERSION(2, 6, 26)
- #include "fetch27.c"
-#elif LINUX_VERSION_CODE == KERNEL_VERSION(2, 6, 26)
- #include "fetch26.c"
-#elif LINUX_VERSION_CODE > KERNEL_VERSION(2, 6, 23)
- #include "fetch24.c"
+#if defined(RHEL_MAJOR) && LINUX_VERSION_CODE == KERNEL_VERSION(4, 18, 0) \
+   && RHEL_RELEASE >= 198
+ #include "fetch50.c" 
 #else
- #include "fetch.c"
+ #if LINUX_VERSION_CODE > KERNEL_VERSION(4, 20, 0)
+  #include "fetch50.c"
+ #elif LINUX_VERSION_CODE > KERNEL_VERSION(2, 6, 26)
+  #include "fetch27.c"
+ #elif LINUX_VERSION_CODE == KERNEL_VERSION(2, 6, 26)
+  #include "fetch26.c"
+ #elif LINUX_VERSION_CODE > KERNEL_VERSION(2, 6, 23)
+  #include "fetch24.c"
+ #else
+  #include "fetch.c"
+ #endif
 #endif
 
 
